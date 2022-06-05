@@ -12,8 +12,6 @@ import org.telegram.telegrambots.meta.bots.AbsSender;
 import bot.utils.KeyboardBuilder;
 
 public class SetLanguageCommand extends BotCommand {
-    private final CallbackConverter encoder = new CallbackConverter();
-
     public SetLanguageCommand() {
         super("setlang", "changes dictionary language");
     }

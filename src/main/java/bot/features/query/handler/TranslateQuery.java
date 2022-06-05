@@ -9,6 +9,7 @@ import services.Language;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import bot.utils.MessageSender;
 
+import java.util.List;
 import java.util.Set;
 
 public class TranslateQuery implements QueryHandler {
@@ -21,12 +22,16 @@ public class TranslateQuery implements QueryHandler {
     @Override
     public void execute(CallbackQuery callback) {
         String chatId = callback.getMessage().getChatId().toString();
+
         // Show "typing..." while processing user's query
         sender.sendTypingAction(chatId);
+
         // Get user's query from callback data
         Query query = new CallbackConverter().decode(callback.getData());
         String[] args = query.getArgs();
-        Set<String> translations = new Dictionary().getTranslations(args[0], Language.ENGLISH, Language.RUSSIAN);
+
+        // Send translations to the user chat
+        List<String> translations = new Dictionary().getTranslations(args[0], Language.ENGLISH, Language.RUSSIAN);
         if (translations != null) {
             String preview = new PreviewFactory().getTranslationPreview(translations);
             sender.sendDefaultMessage(preview, chatId);

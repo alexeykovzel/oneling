@@ -1,5 +1,6 @@
 package services.api;
 
+import bot.config.BotConfig;
 import db.entity.Definition;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
@@ -7,19 +8,21 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class WordsAPI extends HttpClientAPI {
     public WordsAPI() {
-//        super("WordsAPI", BotConfig.WORDS_API_HOST, BotConfig.WORDS_API_KEY);
-        super("123", "123", "123");
+        super("WordsAPI", BotConfig.getInstance().getWordsAPIHost(),
+                BotConfig.getInstance().getWordsAPIKey());
     }
 
-    public Set<Definition> getDefinitions(String word) {
+    public List<Definition> getDefinitions(String word) {
         JSONArray results = getResults(word);
         if (results == null) return null;
-        Set<Definition> definitions = new HashSet<>();
+        List<Definition> definitions = new ArrayList<>();
         for (int i = 0; i < results.length(); i++) {
             JSONObject result = results.getJSONObject(i);
             String definition = result.getString("definition");
@@ -29,10 +32,10 @@ public class WordsAPI extends HttpClientAPI {
         return definitions;
     }
 
-    public Set<String> getExamples(String word) {
+    public List<String> getExamples(String word) {
         JSONArray results = getResults(word);
         if (results == null) return null;
-        Set<String> examples = new HashSet<>();
+        List<String> examples = new ArrayList<>();
         for (int i = 0; i < results.length(); i++) {
             JSONObject result = results.getJSONObject(i);
             if (result.has("examples")) {

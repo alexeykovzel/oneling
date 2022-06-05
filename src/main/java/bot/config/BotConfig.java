@@ -1,41 +1,32 @@
 package bot.config;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 
-import java.io.InputStream;
-import java.util.List;
-import java.util.Map;
+import java.io.*;
 
+@Getter
+@Setter
 public class BotConfig {
-//    private final String wordsAPIHost;
-//    private final String wordsAPIKey;
-//    private final String botToken;
-//    private final String botUsername;
+    private static BotConfig instance;
 
-    public BotConfig() {
-        Yaml yaml = new Yaml();
-        InputStream inputStream = this.getClass()
-                .getClassLoader()
-                .getResourceAsStream("config.yaml");
-        Map<String, Object> obj = yaml.load(inputStream);
-
-//        wordsAPIHost = config.wordsAPIHost;
-//        wordsAPIKey = config.wordsAPIKey;
-//        botToken = config.botToken;
-//        botUsername = config.botUsername;
-    }
-
-    public static void main(String[] args) {
-        BotConfig config = BotConfig.getInstance();
-        System.out.println(config);
-    }
+    private String wordsAPIHost;
+    private String wordsAPIKey;
+    private String botToken;
+    private String botUsername;
 
     public static BotConfig getInstance() {
-        return BotConfigHolder.instance;
-    }
-
-    private final static class BotConfigHolder {
-        private final static BotConfig instance = new BotConfig();
+        if (instance == null) {
+            try {
+                Yaml yaml = new Yaml(new Constructor(BotConfig.class));
+                FileInputStream in = new FileInputStream("src/main/resources/config.yaml");
+                instance = yaml.load(in);
+            } catch (FileNotFoundException e) {
+                System.out.println("[ERROR] Bot config could not be initialized");
+            }
+        }
+        return instance;
     }
 }

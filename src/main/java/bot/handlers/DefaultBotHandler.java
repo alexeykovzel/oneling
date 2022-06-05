@@ -1,5 +1,6 @@
 package bot.handlers;
 
+import bot.config.BotConfig;
 import bot.utils.MessageSender;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.extensions.bots.commandbot.commands.CommandRegistry;
@@ -35,13 +36,11 @@ public abstract class DefaultBotHandler extends TelegramLongPollingBot implement
 
     @Override
     public String getBotUsername() {
-//        return BotConfig.BOT_USERNAME;
-        return null;
+        return BotConfig.getInstance().getBotUsername();
     }
 
     @Override
     public String getBotToken() {
-        return null;
-//        return BotConfig.BOT_TOKEN;
+        return BotConfig.getInstance().getBotToken();
     }
 }

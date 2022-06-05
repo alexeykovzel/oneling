@@ -1,6 +1,6 @@
 package bot.handlers;
 
-import bot.config.EmojiConfig;
+import bot.config.Emoji;
 import bot.features.CallbackConverter;
 import bot.features.query.QueryType;
 import bot.features.PreviewFactory;
@@ -17,6 +17,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import services.Dictionary;
 import bot.utils.KeyboardBuilder;
 
+import java.util.List;
 import java.util.Set;
 
 @Component
@@ -42,18 +43,21 @@ public class OnelingBotHandler extends DefaultBotHandler {
         // Process user's query using callback data
         Query query = encoder.decode(callback.getData());
         String[] args = query.getArgs();
+        String word = args[0];
         String response = null;
         switch (query.getAction()) {
             case GET_TRANSLATIONS:
-                Set<String> translations = dictionary.getTranslations(args[0], Language.ENGLISH, Language.RUSSIAN);
-                if (translations != null) response = previewFactory.getTranslationPreview(translations);
+                List<String> translations = dictionary.getTranslations(word, Language.ENGLISH, Language.RUSSIAN);
+                response = (translations != null) ? previewFactory.getTranslationPreview(translations)
+                        : "Sorry, could not find any translations for \"" + word + "\" " + Emoji.CRYING_FACE;
                 break;
             case GET_EXAMPLES:
-                Set<String> examples = dictionary.getExamples(args[0], Language.ENGLISH);
-                if (examples != null) response = previewFactory.getExamplePreview(examples);
+                List<String> examples = dictionary.getExamples(word, Language.ENGLISH);
+                response = (examples != null) ? previewFactory.getExamplePreview(examples, 5)
+                        : "Sorry, could not find any examples for \"" + word + "\" " + Emoji.CRYING_FACE;
                 break;
         }
-        response = response == null ? "Failed to process a callback..." : response;
+        response = (response == null) ? "[ERROR] Failed to process callback" + Emoji.CRYING_FACE : response;
         sender.sendDefaultMessage(response, chatId);
         sender.answerCallback(callback.getId());
     }
@@ -61,14 +65,14 @@ public class OnelingBotHandler extends DefaultBotHandler {
     @Override
     public void handleNonTextMessage(Message message) {
         String chatId = message.getChatId().toString();
-        sender.sendDefaultMessage("Send pls text", chatId);
+        sender.sendDefaultMessage("Send please text", chatId);
     }
 
     @Override
     public void handleTextMessage(Message message) {
         String chatId = message.getChatId().toString();
         String word = message.getText();
-        Set<Definition> definitions = dictionary.getDefinitions(word, Language.ENGLISH);
+        List<Definition> definitions = dictionary.getDefinitions(word, Language.ENGLISH);
         if (definitions != null && !definitions.isEmpty()) {
 
             // Build a word preview with its definitions
@@ -81,7 +85,7 @@ public class OnelingBotHandler extends DefaultBotHandler {
         } else {
             // Send error message if no definitions found
             sender.sendDefaultMessage(String.format("Ahh, I don't know what is '*%s*' %s",
-                    word, EmojiConfig.DISAPPOINTED_BUT_RELIEVED_FACE), chatId);
+                    word, Emoji.DISAPPOINTED_BUT_RELIEVED_FACE), chatId);
         }
     }
 
@@ -94,7 +98,7 @@ public class OnelingBotHandler extends DefaultBotHandler {
         commandRegistry.registerDefaultAction((absSender, message) -> {
             String chatId = message.getChatId().toString();
             sender.sendDefaultMessage(String.format("The command '%s' is not known by this bot. " +
-                    "Here comes some help %s", message.getText(), EmojiConfig.AMBULANCE), chatId);
+                    "Here comes some help %s", message.getText(), Emoji.AMBULANCE), chatId);
             helpCommand.execute(absSender, message.getFrom(), message.getChat(), new String[]{});
         });
     }
