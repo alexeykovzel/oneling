@@ -34,7 +34,7 @@ public class Chat {
     private User user;
 
     @Column(name = "dictionary_key")
-    private int dictionaryKey = Language.ENGLISH.getKey();
+    private String dictionaryKey = Language.ENGLISH.getKey();
 
     public Chat(String id, User user) {
         this.id = id;

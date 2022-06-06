@@ -1,6 +1,5 @@
 package com.alexeykovzel.dictionary.api;
 
-import com.alexeykovzel.bot.config.BotConfig;
 import com.alexeykovzel.database.entity.Definition;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
@@ -11,11 +10,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WordsAPI extends HttpClientAPI {
-    public WordsAPI() {
-        super("WordsAPI", BotConfig.getInstance().getWordsAPIHost(),
-                BotConfig.getInstance().getWordsAPIKey());
-    }
+public class WordsAPI {
+    public static final String API_URL = "https://wordsapiv1.p.rapidapi.com/words/";
+    public static final String API_HOST = "wordsapiv1.p.rapidapi.com";
 
     public List<Definition> getDefinitions(String word) {
         JSONArray results = getResults(word);
@@ -46,8 +43,7 @@ public class WordsAPI extends HttpClientAPI {
     }
 
     private JSONArray getResults(String word) {
-        String url = String.format("https://wordsapiv1.p.rapidapi.com/words/%s", word);
-        try (Response response = RapidAPIClient.getInstance().sendRequest(url, host, key)) {
+        try (Response response = RapidAPIClient.getInstance().sendRequest(API_URL + word, API_HOST)) {
             ResponseBody body = response.body();
             if (body != null) {
                 JSONObject data = new JSONObject(body.string());
@@ -56,7 +52,7 @@ public class WordsAPI extends HttpClientAPI {
                 }
             }
         } catch (IOException e) {
-            System.out.println(getName() + " is not responding...");
+            System.out.println("WordsAPI is not responding...");
         }
         return null;
     }

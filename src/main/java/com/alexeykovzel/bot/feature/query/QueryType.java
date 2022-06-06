@@ -20,15 +20,14 @@ public enum QueryType {
      * Translates a word.
      */
     TRANSLATE("1", ((sender, callback) -> {
-        String chatId = callback.getMessage().getChatId().toString();
         String[] args =  Query.decode(callback.getData()).getArgs();
         String word = args[0];
 
-        List<String> translations = new Dictionary().getTranslations(word, Language.ENGLISH, Language.RUSSIAN);
+        List<String> translations = new Dictionary().getTranslations(word, Language.RUSSIAN);
         String response = (translations != null) ? new PreviewFactory().getTranslationPreview(translations)
                 : "Sorry, could not find any translations for \"" + word + "\" " + Emoji.CRYING_FACE;
 
-        sender.sendDefaultMessage(response, chatId);
+        sender.sendDefaultMessage(response, getChatId(callback));
         sender.answerCallback(callback.getId());
     })),
 
@@ -36,7 +35,6 @@ public enum QueryType {
      * Sends definitions on a word.
      */
     GET_DEFINITIONS("2",((sender, callback) -> {
-        String chatId = callback.getMessage().getChatId().toString();
         String[] args =  Query.decode(callback.getData()).getArgs();
         String word = args[0];
 
@@ -44,7 +42,7 @@ public enum QueryType {
         String response = (definitions != null) ? new PreviewFactory().getDefinitionPreview(definitions, 5)
                 : "Sorry, could not find any definitions for \"" + word + "\" " + Emoji.CRYING_FACE;
 
-        sender.sendDefaultMessage(response, chatId);
+        sender.sendDefaultMessage(response, getChatId(callback));
         sender.answerCallback(callback.getId());
     })),
 
@@ -52,7 +50,6 @@ public enum QueryType {
      * Gets examples on a word.
      */
     GET_EXAMPLES("3", ((sender, callback) -> {
-        String chatId = callback.getMessage().getChatId().toString();
         String[] args =  Query.decode(callback.getData()).getArgs();
         String word = args[0];
 
@@ -60,7 +57,7 @@ public enum QueryType {
         String response = (examples != null) ? new PreviewFactory().getExamplePreview(examples, 5)
                 : "Sorry, could not find any examples for \"" + word + "\" " + Emoji.CRYING_FACE;
 
-        sender.sendDefaultMessage(response, chatId);
+        sender.sendDefaultMessage(response, getChatId(callback));
         sender.answerCallback(callback.getId());
     })),
 
@@ -80,8 +77,14 @@ public enum QueryType {
 
     public static QueryType byId(String id) {
         for (QueryType queryType : values()) {
-            if (queryType.id.equals(id)) return queryType;
+            if (queryType.id.equals(id)) {
+                return queryType;
+            }
         }
         return null;
+    }
+
+    private static String getChatId(CallbackQuery callback) {
+        return callback.getMessage().getChatId().toString();
     }
 }

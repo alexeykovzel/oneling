@@ -1,13 +1,15 @@
 package com.alexeykovzel.dictionary;
 
+import com.alexeykovzel.dictionary.api.GoogleTranslateAPI;
 import com.alexeykovzel.dictionary.api.WordsAPI;
 import com.alexeykovzel.database.entity.Definition;
 
 import java.util.List;
 
 public class Dictionary {
-    public List<String> getTranslations(String word, Language from, Language to) {
-        return null;
+
+    public List<String> getTranslations(String word, Language to) {
+        return new GoogleTranslateAPI().translate(word, to.getKey());
     }
 
     public List<Definition> getDefinitions(String word, Language from) {

@@ -12,10 +12,9 @@ import java.io.*;
 public class BotConfig {
     private static BotConfig instance;
 
-    private String wordsAPIHost;
-    private String wordsAPIKey;
-    private String botToken;
     private String botUsername;
+    private String botToken;
+    private String rapidAPIKey;
 
     public static BotConfig getInstance() {
         if (instance == null) {
