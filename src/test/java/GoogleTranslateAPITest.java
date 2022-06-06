@@ -1,4 +1,4 @@
-import com.alexeykovzel.dictionary.api.GoogleTranslateAPI;
+import com.alexeykovzel.features.dictionary.GoogleTranslateAPI;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

@@ -40,8 +40,8 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp:4.9.3'
     implementation 'com.mashape.unirest:unirest-java:1.4.9'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.3'
-    implementation 'com.google.code.gson:gson:2.9.0'
-    implementation 'org.yaml:snakeyaml:1.30'
+    implementation 'com.github.pemistahl:lingua:1.1.1'                      // language detection
+    implementation 'org.yaml:snakeyaml:1.30'                                // yaml converting
 
     /* Testing */
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
