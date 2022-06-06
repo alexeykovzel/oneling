@@ -21,32 +21,21 @@ dependencies {
     /* Persistence */
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-cache'
-    implementation 'org.mariadb.jdbc:mariadb-java-client:3.0.4'
     runtimeOnly 'com.h2database:h2'
 
-    /* Logging */
-    implementation platform('org.apache.logging.log4j:log4j-bom:2.14.1')
-    implementation 'org.apache.logging.log4j:log4j-api'
-    implementation 'org.apache.logging.log4j:log4j-core'
-    runtimeOnly 'org.apache.logging.log4j:log4j-slf4j18-impl'
-
-    /* Telegram */
+    /* Telegram Bot */
     implementation 'org.telegram:telegrambots-spring-boot-starter:6.0.1'
     implementation 'org.telegram:telegrambotsextensions:6.0.1'
     implementation 'org.telegram:telegrambots:5.3.0'
 
-    /* Other */
-    implementation 'org.jsoup:jsoup:1.14.3'
-    implementation 'com.squareup.okhttp3:okhttp:4.9.3'
-    implementation 'com.mashape.unirest:unirest-java:1.4.9'
-    implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.3'
-    implementation 'com.github.pemistahl:lingua:1.1.1'                      // language detection
-    implementation 'org.yaml:snakeyaml:1.30'                                // yaml converting
-
     /* Testing */
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.2'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.2'
+
+    /* Other */
+    implementation 'com.squareup.okhttp3:okhttp:4.9.3'      // Sending HTTP requests
+    implementation 'com.github.pemistahl:lingua:1.1.1'      // Language detection
+    implementation 'org.yaml:snakeyaml:1.30'                // YAML conversion
 }
 
 test {
